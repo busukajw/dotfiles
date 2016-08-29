@@ -1,5 +1,9 @@
 #adding powerline status magicaroo
 
+actual_path=$( /opt/local/bin/greadlink -f "${BASH_SOURCE}")
+#using 2 dirname because we need to also remove the last directory
+#to get the base director of the dotfiles
+DOTFILES_DIR=$( dirname "$(dirname "${actual_path}")")
 for DOTFILE in "$DOTFILES_DIR"/system/.{path,env,alias}
 do
 	[ -f "$DOTFILE" ] && source $DOTFILE
