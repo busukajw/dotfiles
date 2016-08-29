@@ -1,0 +1,6 @@
+
+# MacPorts Installer addition on 2016-08-09_at_13:16:06: adding an appropriate PATH variable for use with MacPorts.
+export PATH="~/bin:/opt/local/bin:/opt/local/sbin:$PATH:/Users/awalker/Library/Python/3.5/bin"
+# Finished adapting your PATH environment variable for use with MacPorts.
+
+export PATH="$PATH:"/Applications/microchip/xc8/v1.38/bin""

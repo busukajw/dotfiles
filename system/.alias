@@ -14,4 +14,7 @@ esac
 	alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
 # Always use color output for `ls`
 	alias ls="command ls ${colorflag}"
+# couple of tmux alias's
+alias tma='tmux attach -d -t'
+alias git-tmux='tmux new -s $(basename) $(pwd))'
 
