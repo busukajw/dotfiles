@@ -69,6 +69,8 @@ au BufNewFile,BufRead *.py
 	\ set autoindent |
 	\ set fileformat=unix
 let python_highlight_all=1
+let g:ycm_python_binary_path = '~/.virtualenvs/general/bin/python3'
+
 
 
 "Enable folding
