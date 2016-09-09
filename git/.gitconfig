@@ -1,0 +1,32 @@
+[user]
+	name = Aaron Walker
+	email = busukajw@gmail.com
+
+[github]
+	user = busukajw@gmail.com
+
+[core]
+	excludesfile = ~/.gitignore_global
+	editor = vim
+	filemode = false
+	trustctime = false
+
+[color]
+	ui = auto
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+
+[credential]
+	helper = osxkeychain
+[grep]
+	lineNumber = true
+
+[help]
+	autocorrect = 1
