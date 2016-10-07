@@ -104,6 +104,8 @@ if (exists('+colorcolumn'))
 	highlight ColorColumn ctermbg=9
 endif
 
+"use os x system clipboard
+set clipboard=unnamed
 " Global ycm_extra_conf.py
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 set pastetoggle=<F2>
