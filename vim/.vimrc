@@ -117,6 +117,10 @@ filetype plugin indent on
 syntax enable
 set encoding=utf-8
 set number        " Show line numbers
+" toggle invisible characters
+set list
+set listchars=tab:→\ ,eol:¬,trail:⋅,extends:❯,precedes:❮
+set showbreak=↪
 set background=dark
 "let g:solarized_termtrans = 1
 let g:solarized_termcolors = 256
