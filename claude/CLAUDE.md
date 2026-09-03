@@ -141,6 +141,9 @@ All Home Assistant operations must go through the HA MCP tools. Do not attempt S
 **Home Assistant instance:** https://homeassistant.fraggle.tech  
 **HA has ~3,300 entities across 40 domains and 22 rooms.** Search before assuming an entity doesn't exist.
 
+**InfluxDB org:** `homeautomation` (id `07eb723dc0c1b02d`) — the only org on the instance. Pass this as `org` to every InfluxDB MCP query; `homeassistant` is **not** a valid org name.
+Buckets: `home_assistant`, `unifi`, `proxmox`, `pihole`, `frigate_events`, `frigate_summary`, `network_probes`, `_monitoring`, `_tasks`.
+
 ---
 
 ## Home Assistant — How to Make Changes
