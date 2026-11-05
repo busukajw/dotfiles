@@ -129,6 +129,11 @@ If a slug already exists:
 
 ## Step 6 — Write staging pages
 
+Before writing any staging page, ensure the staging/ directory exists:
+```bash
+mkdir -p "/Users/awalker/Documents/CLAUDE/Agentic Vault/wiki/staging"
+```
+
 For each concept with confidence >= 0.5, write a page to `staging/YYYY-MM-DD-[concept-slug].md`.
 
 Use the date from the raw file (the source date, not today's date).
@@ -195,7 +200,9 @@ Operations:
 - `ingest-skip` — concept skipped with reason
 - `ingest-existing` — raw entry already existed, skipped creation
 
-Use today's date and approximate current time.
+Use the real current time from `date "+%Y-%m-%d %H:%M"`. Never compose or estimate a timestamp.
+
+**Writing log lines safely.** Do not loop over an unquoted shell variable (`for f in $FILES`). zsh does not word-split it, so every filename lands in one malformed entry. Write the lines with a heredoc, or loop over a glob or an array.
 
 Example entries:
 ```
@@ -203,6 +210,21 @@ Example entries:
 2026-05-11 14:30 | ingest | staging/2026-05-11-72-hour-transfer-window.md | created; source agent-curriculum-pm
 2026-05-11 14:30 | ingest-skip | agent-curriculum-pm C4 governance-pm-boundary | confidence 0.40 Low — below threshold
 ```
+
+---
+
+## Step 7b — Verify links and contradictions
+
+Run the read-only link checker on staging:
+
+```bash
+python3 "/Users/awalker/Documents/CLAUDE/Agentic Vault/wiki/scripts/check-links.py" --only staging
+```
+
+- **MISSING** for a page you just wrote: fix the link, or remove it if the target doesn't exist. Do not invent pages to satisfy links.
+- **WARN** (a staging page `contradicts` a canonical page in pages/): tell the user in the report. Name the canonical page and the conflicting claim, and offer an update to the canonical page. Do not edit pages/ without explicit approval.
+
+Do not hand-roll link checks with shell globs. zsh aborts when a glob has no match, which gave false "MISSING" results on 2026-11-04.
 
 ---
 
@@ -244,5 +266,6 @@ Run /wiki-promote staging/[filename].md on any page you want to promote to pages
 - [ ] Slug uniqueness checked against both staging/ and pages/
 - [ ] Staging pages written for all concepts with confidence >= 0.5
 - [ ] All skips logged with reason
-- [ ] log.md appended (one line per operation)
+- [ ] log.md appended (one line per operation), with the timestamp taken from `date`
+- [ ] check-links.py run on staging: no MISSING for new pages; any contradiction WARN reported to the user
 - [ ] User report printed
