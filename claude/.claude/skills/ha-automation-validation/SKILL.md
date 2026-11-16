@@ -85,11 +85,16 @@ for identical shower conditions.
 | Room | Correct humidity entity | Do NOT use |
 |------|------------------------|------------|
 | Master bathroom (en-suite) | `sensor.aarons_en_suite_temp_humidity` | FP300 built-in (`sensor.master_bathroom_fp300_humidity` or similar) |
-| Main bathroom | `sensor.main_bathroom_p300_humidity` (FP300 built-in, threshold-and-interval reporting mode confirmed active) | Any other humidity sensor |
+| Main bathroom | **Shower detector** `binary_sensor.main_bathroom_shower_running` (rise rule on the Sonoff `sensor.bathroom_temp_sensor_humidity` via its 30-min min/max statistics helpers) **plus** `sensor.main_bathroom_p300_humidity` > 65 % **only while fresh** (reported < 10 min ago; FP300 built-in, threshold-and-interval reporting mode) | A fixed % threshold on the Sonoff (its scale differs from the FP300, and its dry baseline shifts 38–62 % by season); 65 % on anything but the FP300; a stale FP300 reading as a hold; any other humidity sensor |
+
+Main bathroom since 2026-11-16 — see `presence-lighting/rooms/main_bathroom.md` (Layer 1 → Calibration)
+and `main_bathroom_shower_analysis_2026-10-30.md`. The Sonoff detector thresholds (start +4 above
+30-min min, end 3 below 30-min max) are calibrated on the Sonoff only.
 
 **Rule:** If the automation references any humidity sensor, verify it is the correct
 dedicated sensor for that room. Never swap these — thresholds are calibrated per-sensor
-and are not interchangeable.
+and are not interchangeable. A new humidity source for a room needs its own calibration
+block in the room file before it goes in this table.
 
 ### 2c. FP300 device configuration — never touch reporting intervals
 
