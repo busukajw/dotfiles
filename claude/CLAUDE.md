@@ -136,7 +136,7 @@ All Home Assistant operations must go through the HA MCP tools. Do not attempt S
 | Home Assistant | http://192.168.30.21:8086/mcp | All HA entity, automation, state, and helper operations |
 | InfluxDB | http://192.168.30.26:3000/mcp | Time series data, statistics, long-term sensor history |
 | Grafana | http://192.168.30.25:8000/sse | Dashboard management and visualisation |
-| UniFi | http://192.168.30.28:3000/sse | Network device information |
+| UniFi | http://192.168.30.24:3000/sse | Network device information — bearer token required (Caddy proxy on docker-02 192.168.30.118). Desktop chat uses the mcp-remote bridge; see ~/Documents/CLAUDE/mcp-desktop/ |
 
 **Home Assistant instance:** https://homeassistant.fraggle.tech  
 **HA has ~3,300 entities across 40 domains and 22 rooms.** Search before assuming an entity doesn't exist.
