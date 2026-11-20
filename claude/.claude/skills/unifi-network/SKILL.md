@@ -92,7 +92,7 @@ Use **ObjectId** for firewall policy tools (or just pass the zone name — tools
 | Camera — Snug | 192.168.70.177 | Camera | WiFi, fixed IP, AP-locked downstairs (MAC 28:7b:11:fe:44:e6) |
 
 DNS for most VLANs: **192.168.30.12** (Pi-hole)  
-Kids VLAN DNS: **185.228.168.9 / 185.228.169.9** (CleanBrowsing family filter)
+Kids VLAN DNS: **the UDM (192.168.50.1)** — `dhcpd_dns_enabled: false`, so the CleanBrowsing values in the DHCP fields are ignored. Filtering = UniFi content filter profile `jack` (categories + SafeSearch). Aaron's choice 2026-11-20: Kids stays on UDM DNS, NOT Pi-hole, because that's where the security filtering lives.
 
 ---
 
@@ -108,7 +108,7 @@ Kids VLAN DNS: **185.228.168.9 / 185.228.169.9** (CleanBrowsing family filter)
 | **Management** | Restricted | Network management plane — reachable by Internal + Vpn only; very locked down |
 | **IoT** | Untrusted | IoT devices — internet allowed (with port blocks), DNS via Pi-hole, no lateral movement |
 | **Camera** | Isolated | CCTV cameras — internet blocked, can only reach Frigate NVR in Internal |
-| **Kids** | Filtered | Kids devices — internet with CleanBrowsing DNS, specific services (JellyFin, HA, NPM) |
+| **Kids** | Filtered | Kids devices — internet via UDM DNS + UniFi content filter `jack`, external DNS (53/853) blocked, specific services (JellyFin, HA, NPM) |
 | **Dmz** | Isolated | DMZ — can reach External; blocked from Internal/IoT/Camera/Kids |
 
 ---
@@ -136,7 +136,7 @@ Policies verified 2026-05-16. Predefined (UniFi default) policies omitted.
 
 ### Kids zone
 - `Kids → Infrastructure` : Allow DNS, JellyFin, HA, NPM
-- `Kids → External` : Block SSH, Allow Internet, Block external DNS
+- `Kids → External` : Block SSH (10000), Block external DNS 53+853 (10002, `6a061a9d…`), then predefined Allow All. "Allow Kids Internet" (10001, `6a061a1c…`) DISABLED 2026-11-20 — it sat above the DNS block and made it dead. Rule order = index; a custom ALLOW above a BLOCK silently voids it.
 - `Kids → Gateway` : Allow Kids NTP
 
 ---
