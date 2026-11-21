@@ -15,7 +15,7 @@ description: >
 **Controller:** UDM-Pro-Max at `192.168.100.1`  
 **API type:** local  
 **Default site:** `default`  
-**MCP server:** `http://192.168.30.28:3000/sse` (v0.2.5+)
+**MCP server:** `http://192.168.30.24:3000/sse` — Caddy bearer-token proxy (`unifi-auth-proxy`); the server itself runs on docker-02 (192.168.30.118, `/opt/unifi-server-mcp`)
 
 ---
 
@@ -36,9 +36,9 @@ Use **ObjectId** for firewall policy tools (or just pass the zone name — tools
 | Camera | USER | `01ea5be2-9339-454f-a7a7-3195b70074bc` | `69d013f90e6d286995871e1e` |
 | Kids | USER | `238604e8-1ab2-472b-bc58-7f2b6eff5488` | `6a0616f01c46c24bb41370d5` |
 | Infrastructure | USER | `6229119c-42ad-4801-bc7c-0fb75ab3e2cd` | `6a0726ec1c46c24bb4164af4` |
-| Management | USER | *(created in session — run list_firewall_zones_v2 to get IDs)* | — |
+| Management | USER | `95dfa07c-f72e-4abc-a03a-bc9fdd39e3d6` | `6a08bae81c46c24bb41acbf0` |
 
-> **Note:** Zone IDs were verified 2026-05-16. Re-verify with `list_firewall_zones_v2`
+> **Note:** Zone IDs were verified 2026-05-16 (Management added 2026-11-20). Re-verify with `list_firewall_zones_v2`
 > if anything looks wrong — UUIDs are stable but ObjectIds can change after controller reset.
 
 ---
@@ -71,21 +71,28 @@ Use **ObjectId** for firewall policy tools (or just pass the zone name — tools
 
 ## Key Hosts
 
+> IPs verified live 2026-11-21 (UniFi active clients + ping). Thread/Matter detail: `Home_Automation/docs/network/thread-matter.md`.
+
 | Host | IP | VLAN | Role |
 |------|----|------|------|
 | UDM-Pro-Max | 192.168.100.1 | Default | Router / UniFi controller |
 | docker-01 | 192.168.30.11 | Infrastructure | Frigate NVR, Pi-hole primary |
-| docker-02 | 192.168.30.119 | Infrastructure | Metrics (node-red, unifi-poller) |
+| docker-02 | 192.168.30.118 | Infrastructure | Proxmox VM, hostname `debian-13`, MAC bc:24:11:87:94:9f. Metrics (node-red, unifi-poller) + UniFi MCP server. (Was .119 — stale.) |
 | NAS | 192.168.30.10 | Infrastructure | InfluxDB, Grafana, MQTT |
 | Proxmox | 192.168.30.6 | Infrastructure | Virtualisation host |
 | Pi-hole | 192.168.30.12 | Infrastructure | DNS resolver (used by all VLANs) |
 | NPM | 192.168.30.13 | Infrastructure | NGINX Proxy Manager |
 | Home Assistant | 192.168.30.5 | Infrastructure | HA instance (MCP on port 8086) |
 | Grafana | 192.168.30.25 | Infrastructure | Dashboards (port 8000) |
-| InfluxDB | 192.168.30.26 | Infrastructure | Time series (port 3000 for MCP) |
-| UniFi MCP | 192.168.30.28 | Infrastructure | UniFi MCP server (port 3000 SSE) |
+| InfluxDB MCP | 192.168.30.26 | Infrastructure | InfluxDB MCP (port 3000). The database itself is on the NAS, 192.168.30.10:8086 |
+| UniFi MCP | 192.168.30.24 | Infrastructure | Caddy auth proxy in front of the UniFi MCP (port 3000 SSE, bearer token). (Was .28 — gone.) |
+| HA MCP | 192.168.30.21 | Infrastructure | Home Assistant MCP (port 8086) |
+| hermes | 192.168.30.116 | Infrastructure | Hermes agent VM (Proxmox) |
 | Frigate NVR | 192.168.30.15 | Infrastructure | Camera NVR (docker macvlan) |
-| SLZB-06P10 | 192.168.30.40 | Infrastructure | Zigbee/Thread coordinator (TCP 6638) |
+| SLZB-06P10 | 192.168.30.40 | Infrastructure | **Zigbee** coordinator only (MAC 3c:8a:1f:0c:8b:63) |
+| SLZB-06 | 192.168.30.200 | Infrastructure | **Thread** radio for HA's OpenThread Border Router (TCP 6638), fixed IP, MAC 94:54:c5:ea:5c:db |
+| Aqara M3 hub | 192.168.30.145 | Infrastructure | Thread border router, fixed IP, MAC 18:c2:3c:41:7b:bb |
+| tado Bridge X | 192.168.30.22 | Infrastructure | Thread border router. On the `fraggle-IoT` SSID with a network override to Infrastructure + fixed IP (API `vlan` field misleadingly says 20), MAC cc:8d:a2:35:0c:e8 |
 | Camera — Front | 192.168.70.3 | Camera | Reolink wired (MAC ec:71:db:03:b0:7b) |
 | Camera — Back | 192.168.70.5 | Camera | Reolink wired (MAC ec:71:db:40:5a:4d) |
 | Camera — Hallway | 192.168.70.112 | Camera | WiFi, fixed IP, AP-locked downstairs (MAC 0c:91:60:69:86:c4) |
